@@ -4,4 +4,11 @@
 	Description: Text-based version of Yahtzee!
 */
 
-#include"codex.h"
+#include "yahtzee.h"
+
+int main(void)
+{
+
+
+	return 0;
+}
