@@ -8,9 +8,11 @@
 
 int main(void)
 {
-	int dice[5] = { 0, 0, 0, 0, 0 };
-	int hold[5] = { 0, 0, 0, 0, 0 };
-	int roll_count = 0, turn_count = 1;
+	int dice[5] = { 0 };
+	int hold[5] = { 0 };
+	int uppers1[6] = { -1 }, uppers2[6] = { -1 };
+	int lowers1[7] = { -1 }, lowers2[7] = { -1 };
+	int roll_count = 1, turn_count = 1;
 	char option = '\0';
 
 	srand(time(NULL));
@@ -18,14 +20,18 @@ int main(void)
 
 	display_menu();
 
-	while (roll_count <= 3 && option != 'n') {
+	//Rolling sequence
+	while (roll_count < 4 && option != 'n') {
 		roll_dice(dice);
 		display_dice(dice);
-		option = roll_continue();
+		option = roll_continue(roll_count);
 		if (option == 'y')
 			hold_dice(hold);
 		roll_count++;
 	}
+	
+	//Scoring sequence
+	scorecard(uppers1, lowers1);
 
 	turn_count++;
 

@@ -88,17 +88,6 @@ void rules(void)
 	printf("The winner is the player with more points at the end of the game.\n");
 }
 /*
-	Function: roll_count()
-	Date Created: 10/09/2019
-	Last Modified:
-	Description: Displays # of rolls this round. Asks if player is ready to score their roll. If count == 3, they don't have a choice. Returns (y/n)
-	Input parameters: Number of rolls so far
-	Returns: (y/n)
-	Preconditions: Roll count available, player's turn has begun
-	Postconditions: Player has chosen whether to score or continue rolling. Number of rolls displayed.
-*/
-char roll_count(int roll_num);
-/*
 	Function: scorecard()
 	Date Created: 10/09/2019
 	Last Modified:
@@ -108,19 +97,36 @@ char roll_count(int roll_num);
 	Preconditions: Player scores available
 	Postconditions: Scorecard displayed, filled in with values.
 */
-void scorecard(int scores[]);
 void roll_dice(int dice[])
 {
 	for (int i = 0; i < 5; i++){
 		dice[i] = rand() % 6 + 1;
 	}
 }
+/*
+	Function: display_dice()
+	Date Created: 10/13/2019
+	Description: Displays results of last roll
+	Input parameters: dice[]
+	Returns: None
+	Preconditions: Player has rolled at least once
+	Postconditions: Roll results displayed
+*/
 void display_dice(int dice[])
 {
 	for (int i = 0; i < 5; i++){
 		printf("Die %d: %d\n", i + 1, dice[i]);
 	}
 }
+/*
+	Function: hold_dice()
+	Date Created: 10/13/2019
+	Description: Allows player to choose which dice to hold for the next roll
+	Input parameters: hold[]
+	Returns: None
+	Preconditions: Player has rolled and chosen to roll again
+	Postconditions: hold[] populated with user decisions. 1 = hold die, 0 = reroll die
+*/
 void hold_dice(int hold[])
 {
 	char option = '\0';
@@ -138,18 +144,57 @@ void hold_dice(int hold[])
 		option = '\0';
 	}
 }
-char roll_continue(void)
+/*
+	Function: roll_continue()
+	Date Created: 10/13/2019
+	Last Modified:
+	Description: Displays # of rolls this round. Asks if player is ready to score their roll. If count == 3, they don't have a choice. Returns (y/n)
+	Input parameters: Number of rolls so far
+	Returns: (y/n)
+	Preconditions: Roll count available, player's turn has begun
+	Postconditions: Player has chosen whether to score or continue rolling. Number of rolls displayed.
+*/
+char roll_continue(int roll_count)
 {
 	char option = '\0';
-	while (option != 'y' && option != 'n') {
-		printf("Keep rolling?\n");
-		scanf(" %c", &option);
-		if (option != 'y' && option != 'n')
-			printf("Invalid input.\n");
+	printf("That was roll #%d. ", roll_count);
+	if (roll_count < 3) {
+		while (option != 'y' && option != 'n') {
+			printf("Keep rolling?\n");
+			scanf(" %c", &option);
+			if (option != 'y' && option != 'n')
+				printf("Invalid input.\n");
+		}
 	}
+	else if (roll_count == 3)
+		option = 'n';
 	return option;
 }
 //Scoring
+/*
+	Function:scorecard()
+	Date Created: 10/09/2019
+	Description: Displays player's current scorecard so they can choose how to score their roll
+	Input parameters: uppers[] and lowers[]
+	Returns: None
+	Preconditions: hold[] initialized, player has finished their round of rolling
+	Postconditions: Scorecard displayed
+*/
+void scorecard(int uppers[], int lowers[])
+{
+	printf("Your current scores are as follows: \n\n");
+	for (int i = 0; i < 6; i++) {
+		printf("%d's: %d\n", i + 1, uppers[i]);
+	}
+	printf("Three-of-a-kind: %d\n", lowers[0]);
+	printf("Four-of-a-kind: %d\n", lowers[1]);
+	printf("Full House: %d\n", lowers[2]);
+	printf("Small Straight: %d\n", lowers[3]);
+	printf("Large Straight: %d\n", lowers[4]);
+	printf("Chance: %d\n", lowers[5]);
+	printf("Yahtzee: %d\n", lowers[6]);
+
+}
 void scoring(int scores[]);
 int get_score_method(void);
 bool scorecard_check(int arr[]);

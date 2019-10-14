@@ -16,12 +16,11 @@
 
 void display_menu(void);
 void rules(void);
-char roll_count(int roll_num);
-void scorecard(int scores[]);
 void roll_dice(int dice[]);
 void display_dice(int dice[]);
 void hold_dice(int hold[]);
-char roll_continue(void);
+char roll_continue(int roll_count);
+void scorecard(int upper_scores[], int lower_scores[]);
 void scoring(int scores[]);
 int get_score_method(void);
 bool scorecard_check(int arr[]);
