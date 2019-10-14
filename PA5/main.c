@@ -15,7 +15,9 @@ int main(void)
 
 	srand(time(NULL));
 	printf("WELCOME TO THE WORLD OF YAHTZEE!\n");
-	
+
+	display_menu();
+
 	while (roll_count <= 3 && option != 'n') {
 		roll_dice(dice);
 		display_dice(dice);
@@ -24,6 +26,7 @@ int main(void)
 			hold_dice(hold);
 		roll_count++;
 	}
+
 	turn_count++;
 
 	return 0;
