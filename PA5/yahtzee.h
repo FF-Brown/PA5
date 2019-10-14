@@ -5,15 +5,23 @@
 */
 
 #define _CRT_SECURE_NO_WARNINGS
+#define RULES 1
+#define PLAY 2
+#define EXIT 3
 
 #include <stdio.h>
 #include <stdbool.h>
+#include <time.h>
+#include <stdlib.h>
 
 void display_menu(void);
 void rules(void);
 char roll_count(int roll_num);
 void scorecard(int scores[]);
-void roll(int dice[]);
+void roll_dice(int dice[]);
+void display_dice(int dice[]);
+void hold_dice(int hold[]);
+char roll_continue(void);
 void scoring(int scores[]);
 int get_score_method(void);
 bool scorecard_check(int arr[]);
