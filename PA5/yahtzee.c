@@ -172,32 +172,205 @@ char roll_continue(int roll_count)
 }
 //Scoring
 /*
-	Function:scorecard()
+	Function: scorecard()
 	Date Created: 10/09/2019
 	Description: Displays player's current scorecard so they can choose how to score their roll
-	Input parameters: uppers[] and lowers[]
+	Input parameters: score[]
 	Returns: None
 	Preconditions: hold[] initialized, player has finished their round of rolling
 	Postconditions: Scorecard displayed
 */
-void scorecard(int uppers[], int lowers[])
+void scorecard(int score[])
 {
 	printf("Your current scores are as follows: \n\n");
 	for (int i = 0; i < 6; i++) {
-		printf("%d's: %d\n", i + 1, uppers[i]);
+		printf("%d.) %d's: %d\n", i + 1, i + 1, score[i]);
 	}
-	printf("Three-of-a-kind: %d\n", lowers[0]);
-	printf("Four-of-a-kind: %d\n", lowers[1]);
-	printf("Full House: %d\n", lowers[2]);
-	printf("Small Straight: %d\n", lowers[3]);
-	printf("Large Straight: %d\n", lowers[4]);
-	printf("Chance: %d\n", lowers[5]);
-	printf("Yahtzee: %d\n", lowers[6]);
+	printf("7.) Three-of-a-kind: %d\n", score[6]);
+	printf("8.) Four-of-a-kind: %d\n", score[7]);
+	printf("9.) Full House: %d\n", score[8]);
+	printf("10.) Small Straight: %d\n", score[9]);
+	printf("11.) Large Straight: %d\n", score[10]);
+	printf("12.) Yahtzee: %d\n", score[11]);
+	printf("13.) Chance: %d\n", score[12]);
 
 }
+/*
+	Function: tally_frequency()
+	Date Created: 10/14/2019
+	Description: Finds the frequency of each die value in dice[]
+	Input parameters: dice[] for intput and frequency[] for output
+	Returns: None
+	Preconditions: Player round has ended, dice[] is populated
+	Postconditions: frequency[] populated for use
+*/
+void tally_frequency(int dice[], int frequency[])
+{
+	for (int i = 0; i < 5; i++){
+		for (int j = 1; j < 7; j++){
+			if (dice[i] == (j))
+				frequency[j] += 1;
+		}
+	}
+	/* For debugging purposes
+	for (int k = 1; k < 7; k++) {
+		printf("You rolled %d %d's.\n", frequency[k], k);
+	}*/
+}
+/*
+	Function: get_scoring_method()
+	Date Created: 10/14/2019
+	Description: Allows user to choose method for scoring their roll
+	Input parameters: None
+	Returns: User's choice (int)
+	Preconditions: Round finished. Scorecard displayed
+	Postconditions: User has selected a scoring method
+*/
+int get_scoring_method(void)
+{
+	int option = 0;
+	while (option < 1 || option > 13) {
+		printf("How would you like to score your roll? Enter the number on the scorecard referencing the method you would like to choose.\n");
+		scanf("%d", &option);
+		if (option < 1 || option > 13)
+			printf("Invalid entry.\n");
+	}
+	return option;
+}
+int calculate_score(int option, int dice[], int frequency[])
+{
+	int score = 0, success = 0;
+	switch (option) {
+		case 1:
+			score = frequency[1];
+			printf("You got %d points!\n", score);
+			break;
+		case 2:
+			score = frequency[2] * 2;
+			printf("You got %d points!\n", score);
+			break;
+		case 3:
+			score = frequency[3] * 3;
+			printf("You got %d points!\n", score);
+			break;
+		case 4:
+			score = frequency[4] * 4;
+			printf("You got %d points!\n", score);
+			break;
+		case 5:
+			score = frequency[5] * 5;
+			printf("You got %d points!\n", score);
+			break;
+		case 6:
+			score = frequency[6] * 6;
+			printf("You got %d points!\n", score);
+			break;
+		case THREE_OF_A_KIND:
+			for (int i = 0; i < 7; i++) {
+				if (frequency[i] >= 3) {
+					success = 1;
+					score = sum_array(dice, 5);
+				}
+			}
+			if (success == 1)
+				printf("You got %d points!\n", score);
+			else if (success == 0)
+				printf("Sorry, you don't have a three-of-a-kind, so you get 0 points. ;(\n");
+		break;
+		case FOUR_OF_A_KIND:
+			for (int i = 0; i < 7; i++) {
+				if (frequency[i] >= 4) {
+					success = 1;
+					score = sum_array(dice, 5);
+				}
+			}
+			if (success == 1)
+				printf("You got %d points!\n", score);
+			else if (success == 0)
+				printf("Sorry, you don't have a three-of-a-kind, so you get 0 points. ;(\n");
+			break;
+		case FULL_HOUSE:
+			for (int i = 0; i < 7; i++) {
+				if (frequency[i] == 2) {
+					for (int j = 0; j < 7; j++) {
+						if (frequency[j] == 3) {
+							success = 1;
+							score = 25;
+						}
+					}
+				}
+			}
+			if (success == 1)
+				printf("You got 25 points!\n");
+			else if (success == 0)
+				printf("Sorry, you don't have a full house, so you get 0 points.\n");
+			break;
+		case SM_STRAIGHT:
+			//There are only 3 combinations (not including the extra number) that yield a small straight. 1-4, 2-5, and 3-6. All of these include 3 and 4. Therefore we first check if the player rolled at least one 3 and one 4.
+			//Because screw sorting.
+			if (frequency[3] >= 1 && frequency[4] >= 1) {
+				//If so, we check whether they have a two.
+				if (frequency[2] >= 1) {
+					//If so, if they also have a 1 or a 5, they have a small straight.
+					if (frequency[1] >= 1 || frequency[5] >= 1) {
+						success = 1;
+						score = 25;
+					}
+				}
+				//If they did not have a two, they must have both a 5 and a 6 to have a small straight.
+				else if (frequency[5] >= 1 && frequency[6] >= 1) {
+					success = 1;
+					score = 25;
+				}
+			}
+			//Let the player know whether they got the points for the straight or not. 'Int success' resets each time the function is called, so no problem using it in multiple cases.
+			if (success == 1)
+				printf("You got 25 points!\n");
+			else if (success == 0)
+				printf("Sorry, you don't have a small straight, so you get 0 points. ;(\n");
+			break;
+		case LG_STRAIGHT:
+			//There are only 2 combinations that yield a large straight. 1-5 or 2-6. Both require 2-5. Hence:
+			if (frequency[2] >= 1 && frequency[3] >= 1 && frequency[4] >= 1 && frequency[5] >= 1) {
+				//If the player has 2-5, they only need a 1 or a 6 to make the large straight.
+				if (frequency[1] >= 1 || frequency[6] >= 1) {
+					success = 1;
+					score = 30;
+				}
+			}
+			if (success == 1)
+				printf("You got 30 points!\n");
+			else if (success == 0)
+				printf("Sorry, you don't have a large straight, so you get 0 points. ;(\n");
+			break;
+		case YAHTZEE:
+			for (int i = 0; i < 7; i++) {
+				if (frequency[i] == 5) {
+					success = 1;
+					score = 25;
+				}
+			}
+			if (success == 1)
+				printf("You got 50 points!\n");
+			else if (success == 0)
+				printf("Sorry, you don't have a yahtzee, so you get 0 points. ;(\n");
+			break;
+		case CHANCE:
+			score = sum_array(dice, 5);
+			printf("You got %d points!\n", score);
+			break;
+	}
+	return score;
+}
+int sum_array(int dice[], int size)
+{
+	int sum = 0;
+	for (int i = 0; i < size; i++) {
+		sum += dice[i];
+	}
+	return sum;
+}
 void scoring(int scores[]);
-int get_score_method(void);
 bool scorecard_check(int arr[]);
 void sort_arr(int arr[], int size);
-void sum_arr(int arr[], int size);
 void final_scores(int p1_scores[], int p2_scores[]);
