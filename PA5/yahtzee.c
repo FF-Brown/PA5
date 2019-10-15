@@ -40,6 +40,7 @@ void display_menu(void)
 			break;
 		//Leave switch and while loop to begin playing game
 		case PLAY:
+			printf("Good luck!\n\n");
 			break;
 		//Exit program
 		case EXIT:
@@ -88,14 +89,14 @@ void rules(void)
 	printf("The winner is the player with more points at the end of the game.\n");
 }
 /*
-	Function: scorecard()
+	Function: roll_dice()
 	Date Created: 10/09/2019
 	Last Modified:
-	Description: Displays player's current
-	Input parameters: scores[]
+	Description: Generates 5 random values from 1-6 inclusive and stores them in an array as dice rolls.
+	Input parameters: dice[]
 	Returns: None
-	Preconditions: Player scores available
-	Postconditions: Scorecard displayed, filled in with values.
+	Preconditions: Turn has begun
+	Postconditions: Rolls stored in dice[]
 */
 void roll_dice(int dice[])
 {
@@ -177,12 +178,12 @@ char roll_continue(int roll_count)
 	Description: Displays player's current scorecard so they can choose how to score their roll
 	Input parameters: score[]
 	Returns: None
-	Preconditions: hold[] initialized, player has finished their round of rolling
+	Preconditions: Player has finished their round of rolling
 	Postconditions: Scorecard displayed
 */
 void scorecard(int score[])
 {
-	printf("Your current scores are as follows: \n\n");
+	printf("Your current scores are as follows. -1 is simply a placeholder indicating that you have yet to use that method. \n\n");
 	for (int i = 0; i < 6; i++) {
 		printf("%d.) %d's: %d\n", i + 1, i + 1, score[i]);
 	}
@@ -237,6 +238,15 @@ int get_scoring_method(void)
 	}
 	return option;
 }
+/*
+	Function: calculate_score()
+	Date Created: 10/14/2019
+	Description: Massive switch to score roll based on user-selected option.
+	Input parameters: User option, dice[], frequency []
+	Returns: Score for that roll
+	Preconditions: Player has rolled the dice and chosen a scoring method. Frequency calculated.
+	Postconditions: Score displayed and returned.
+*/
 int calculate_score(int option, int dice[], int frequency[])
 {
 	int score = 0, success = 0;
@@ -362,6 +372,15 @@ int calculate_score(int option, int dice[], int frequency[])
 	}
 	return score;
 }
+/*
+	Function: sum_array()
+	Date Created: 10/14/2019
+	Description: Finds the sum of an array of the given size
+	Input parameters: array[], size
+	Returns: Sum
+	Preconditions: dice[] populated
+	Postconditions: Sum returned
+*/
 int sum_array(int dice[], int size)
 {
 	int sum = 0;
@@ -370,7 +389,33 @@ int sum_array(int dice[], int size)
 	}
 	return sum;
 }
+/*
+	Function: scorecard_check()
+	Date Created: 10/14/2019
+	Description: Checks a player's scorecard to determine whether they have already used a given scoring method or not.
+	Input parameters: score[], option
+	Returns: Bool
+	Preconditions: Player has chosen a scoring method
+	Postconditions: True/false returned
+*/
+bool scorecard_check(int score[], int option)
+{
+	if (score[option] == -1)
+		printf("You have already used that scoring method. Please choose another option.\n");
+	else
+		return true;
+}
 void scoring(int scores[]);
-bool scorecard_check(int arr[]);
-void sort_arr(int arr[], int size);
 void final_scores(int p1_scores[], int p2_scores[]);
+
+/*TO-DO LIST
+Make hold_dice() actually affect the dice roll
+Alternate turns between players until 13 turns have passed for both
+Calculate final scores
+	Add 35 points for having >= 63 uppers
+	Change -1 values back to 0
+Stick in clear screen commands
+Ask player to hit any key to continue to roll
+Make scorecard() pretty
+Make sure the game can be replayed.
+*/
