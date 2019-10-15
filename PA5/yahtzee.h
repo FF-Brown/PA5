@@ -23,7 +23,7 @@
 
 void display_menu(void);
 void rules(void);
-void roll_dice(int dice[]);
+void roll_dice(int dice[], int hold[]);
 void display_dice(int dice[]);
 void hold_dice(int hold[]);
 char roll_continue(int roll_count);

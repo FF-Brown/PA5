@@ -98,10 +98,11 @@ void rules(void)
 	Preconditions: Turn has begun
 	Postconditions: Rolls stored in dice[]
 */
-void roll_dice(int dice[])
+void roll_dice(int dice[], int hold[])
 {
 	for (int i = 0; i < 5; i++){
-		dice[i] = rand() % 6 + 1;
+		if(hold[i] == 0)
+			dice[i] = rand() % 6 + 1;
 	}
 }
 /*
@@ -400,7 +401,7 @@ int sum_array(int dice[], int size)
 */
 bool scorecard_check(int score[], int option)
 {
-	if (score[option] == -1)
+	if (score[option] != -1)
 		printf("You have already used that scoring method. Please choose another option.\n");
 	else
 		return true;

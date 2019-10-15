@@ -25,10 +25,14 @@ int main(void)
 
 	printf("Player 1 turn!\n");
 	//Rolling sequence
+	//Reset pertient variables
 	roll_count = 1;
 	option = '\0';
+	for (int i = 0; i < 5; i++) {
+		hold[i] = 0;
+	}
 	while (roll_count < 4 && option != 'n') {
-		roll_dice(dice); //ADJUST FOR HOLD_DICE()
+		roll_dice(dice, hold); 
 		display_dice(dice);
 		option = roll_continue(roll_count);
 		if (option == 'y')
@@ -37,6 +41,7 @@ int main(void)
 	}
 	
 	//Scoring sequence
+	//Reset pertient variables
 	option = '\0';
 	available = false;
 	scorecard(score1);
