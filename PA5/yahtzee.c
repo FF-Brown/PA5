@@ -35,11 +35,13 @@ void display_menu(void)
 		//Run process based on input
 		switch (option) {
 		case RULES:
+			system("cls");
 			rules();
 			display_menu();
 			break;
 		//Leave switch and while loop to begin playing game
 		case PLAY:
+			system("cls");
 			printf("Good luck!\n\n");
 			break;
 		//Exit program
@@ -186,15 +188,15 @@ void scorecard(int score[])
 {
 	printf("Your current scores are as follows. -1 is simply a placeholder indicating that you have yet to use that method. \n\n");
 	for (int i = 0; i < 6; i++) {
-		printf("%d.) %d's: %d\n", i + 1, i + 1, score[i]);
+		printf("%d.) %d's:\t\t|\t%d\n", i + 1, i + 1, score[i]);
 	}
-	printf("7.) Three-of-a-kind: %d\n", score[6]);
-	printf("8.) Four-of-a-kind: %d\n", score[7]);
-	printf("9.) Full House: %d\n", score[8]);
-	printf("10.) Small Straight: %d\n", score[9]);
-	printf("11.) Large Straight: %d\n", score[10]);
-	printf("12.) Yahtzee: %d\n", score[11]);
-	printf("13.) Chance: %d\n", score[12]);
+	printf("7.) Three-of-a-kind:\t|\t%d\n", score[6]);
+	printf("8.) Four-of-a-kind:\t|\t%d\n", score[7]);
+	printf("9.) Full House:\t\t|\t%d\n", score[8]);
+	printf("10.) Small Straight:\t|\t%d\n", score[9]);
+	printf("11.) Large Straight:\t|\t%d\n", score[10]);
+	printf("12.) Yahtzee:\t\t|\t%d\n", score[11]);
+	printf("13.) Chance:\t\t|\t%d\n", score[12]);
 
 }
 /*
@@ -406,17 +408,48 @@ bool scorecard_check(int score[], int option)
 	else
 		return true;
 }
-void scoring(int scores[]);
-void final_scores(int p1_scores[], int p2_scores[]);
+int uppers_bonus(int scores[])
+{
+	int uppers_sum = 0, bonus = 0;
+	uppers_sum = sum_array(scores, 6);
+	if (uppers_sum >= 63)
+		bonus = 35;
+	return bonus;
+}
+void final_scores(int p1_scores[], int p2_scores[])
+{
+	int final_score1 = 0, final_score2 = 0;
+	//Remove placeholder -1 and insert 0 for score
+	for (int i = 0; i < 13; i++) {
+		if (p1_scores[i] == -1)
+			p1_scores[i] = 0;
+		if (p2_scores[i] == -1)
+			p2_scores[i] = 0;
+	}
+	final_score1 = sum_array(p1_scores, 13);
+	final_score2 = sum_array(p2_scores, 13);
+	final_score1 += uppers_bonus(p1_scores);
+	final_score2 += uppers_bonus(p2_scores);
+
+	if (final_score1 > final_score2)
+		printf("Congratulations, Player 1! You win with a score of %d points!\nSorry, Player 2! You only scored %d points.\n", final_score1, final_score2);
+	else if (final_score2 > final_score1)
+		printf("Congratulations, Player 2! You win with a score of %d points!\nSorry, Player 1! You only scored %d points.\n", final_score2, final_score1);
+	else if (final_score1 = final_score2)
+		printf("This is unbelievable! Do you know how rare this is? Well, do you?\n.\n.\n.\nWe have a tie!!! Both players ended with a score of %d!! I don't know whether to congratulate you or make fun of you.\n", final_score1);
+}
+char cont_playing(void)
+{
+	char cont = '\0';
+	while (cont != 'y' && cont != 'n') {
+		printf("Would you like to play again?\n");
+		scanf(" %c", &cont);
+		if (cont != 'y' && cont != 'n')
+			printf("Invalid input.\n");
+	}
+	return cont;
+}
 
 /*TO-DO LIST
-Make hold_dice() actually affect the dice roll
-Alternate turns between players until 13 turns have passed for both
-Calculate final scores
-	Add 35 points for having >= 63 uppers
-	Change -1 values back to 0
-Stick in clear screen commands
-Ask player to hit any key to continue to roll
-Make scorecard() pretty
 Make sure the game can be replayed.
 */
