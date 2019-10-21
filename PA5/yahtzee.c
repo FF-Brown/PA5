@@ -403,10 +403,18 @@ int sum_array(int dice[], int size)
 */
 bool scorecard_check(int score[], int option)
 {
-	if (score[option] != -1)
+	bool available = false;
+	if (score[option - 1] != -1) {
 		printf("You have already used that scoring method. Please choose another option.\n");
-	else
-		return true;
+		available = false;
+	}
+	else if (score[option - 1] == -1)
+		available = true;
+	else {
+		printf("Some sort of error.\n");
+		available = false;
+	}
+	return available;
 }
 int uppers_bonus(int scores[])
 {
@@ -451,5 +459,4 @@ char cont_playing(void)
 }
 
 /*TO-DO LIST
-Make sure the game can be replayed.
 */

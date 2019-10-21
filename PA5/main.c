@@ -54,7 +54,7 @@ game_start:
 		//Reset pertinent variables
 		option = '\0';
 		available = false;
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 7; i++) {
 			frequency[i] = 0;
 		}
 
@@ -64,7 +64,7 @@ game_start:
 			available = scorecard_check(score1, option);
 		}
 		tally_frequency(dice, frequency);
-		score1[option] = calculate_score(option, dice, frequency);
+		score1[option - 1] = calculate_score(option, dice, frequency);
 		system("pause");
 		system("cls");
 
@@ -95,7 +95,7 @@ game_start:
 		//Reset pertinent variables
 		option = '\0';
 		available = false;
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 7; i++) {
 			frequency[i] = 0;
 		}
 
@@ -105,7 +105,7 @@ game_start:
 			available = scorecard_check(score2, option);
 		}
 		tally_frequency(dice, frequency);
-		score2[option] = calculate_score(option, dice, frequency);
+		score2[option - 1] = calculate_score(option, dice, frequency);
 		system("pause");
 		system("cls");
 	}
