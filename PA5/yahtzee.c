@@ -416,6 +416,13 @@ bool scorecard_check(int score[], int option)
 	}
 	return available;
 }
+/*
+	Function: uppers_bonus()
+	Date Created: 
+	Description: Gives the player bonus points for having a lot of points in the upper scorecard section
+	Preconditions: Games over
+	Postconditions: Bonus points returned if any
+*/
 int uppers_bonus(int scores[])
 {
 	int uppers_sum = 0, bonus = 0;
@@ -424,6 +431,13 @@ int uppers_bonus(int scores[])
 		bonus = 35;
 	return bonus;
 }
+/*
+	Function: final_scores()
+	Date Created:
+	Description: Calculates both players' final scores
+	Preconditions: Game over
+	Postconditions: Scores and end result displayed
+*/
 void final_scores(int p1_scores[], int p2_scores[])
 {
 	int final_score1 = 0, final_score2 = 0;
@@ -446,6 +460,13 @@ void final_scores(int p1_scores[], int p2_scores[])
 	else if (final_score1 = final_score2)
 		printf("This is unbelievable! Do you know how rare this is? Well, do you?\n.\n.\n.\nWe have a tie!!! Both players ended with a score of %d!! I don't know whether to congratulate you or make fun of you.\n", final_score1);
 }
+/*
+	Function: cont_playing()
+	Date Created:
+	Description: Gives player the option to play again
+	Preconditions: Game over, all results displayed
+	Postconditions: Returns player decision
+*/
 char cont_playing(void)
 {
 	char cont = '\0';
@@ -457,6 +478,109 @@ char cont_playing(void)
 	}
 	return cont;
 }
-
-/*TO-DO LIST
+/*
+	Function: dice_animation()
+	Date Created: 10/21/2019
+	Description: Displays ASCII art for dice rolls
+	Preconditions: Dice have been rolled
+	Postconditions: Dice displayed
 */
+void dice_animation(int dice[]) {
+	char display[260] = " _______ \t _______ \t _______ \t _______ \t _______ \n";
+	char graphics1[3][9] = {
+		{ '|', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '|' } ,
+		{ '|', ' ', ' ', ' ', '0', ' ', ' ', ' ', '|' } ,
+		{ '|', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '|' }
+	};
+	char graphics2[3][9] = {
+		{ '|', ' ', ' ', ' ', ' ', ' ', '0', ' ', '|' } ,
+		{ '|', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '|' } ,
+		{ '|', ' ', '0', ' ', ' ', ' ', ' ', ' ', '|' }
+	};
+	char graphics3[3][9] = {
+		{ '|', ' ', ' ', ' ', ' ', ' ', '0', ' ', '|' } ,
+		{ '|', ' ', ' ', ' ', '0', ' ', ' ', ' ', '|' } ,
+		{ '|', ' ', '0', ' ', ' ', ' ', ' ', ' ', '|' }
+	};
+	char graphics4[3][9] = {
+		{ '|', ' ', '0', ' ', ' ', ' ', '0', ' ', '|' } ,
+		{ '|', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '|' } ,
+		{ '|', ' ', '0', ' ', ' ', ' ', '0', ' ', '|' }
+	};
+	char graphics5[3][9] = {
+		{ '|', ' ', '0', ' ', ' ', ' ', '0', ' ', '|' } ,
+		{ '|', ' ', ' ', ' ', '0', ' ', ' ', ' ', '|' } ,
+		{ '|', ' ', '0', ' ', ' ', ' ', '0', ' ', '|' }
+	};
+	char graphics6[3][9] = {
+		{ '|', ' ', '0', ' ', ' ', ' ', '0', ' ', '|' } ,
+		{ '|', ' ', '0', ' ', ' ', ' ', '0', ' ', '|' } ,
+		{ '|', ' ', '0', ' ', ' ', ' ', '0', ' ', '|' }
+	};
+	char last_row[] = "'-------'\t'-------'\t'-------'\t'-------'\t'-------'\n";
+
+	int current_index = 50;
+	for (int i = 0; i < 3; i++) { //rows
+		for (int j = 0; j < 5; j++, current_index++) { //columns
+			for (int k = 0; k < 9; k++, current_index++) { //characters
+				if (dice[j] == 1)
+					display[current_index] = graphics1[i][k];
+				else if (dice[j] == 2)
+					display[current_index] = graphics2[i][k];
+				else if (dice[j] == 3)
+					display[current_index] = graphics3[i][k];
+				else if (dice[j] == 4)
+					display[current_index] = graphics4[i][k];
+				else if (dice[j] == 5)
+					display[current_index] = graphics5[i][k];
+				else
+					display[current_index] = graphics6[i][k];
+			}
+			if (j < 4)
+				display[current_index] = '\t';
+			else if (j >= 4 && i < 2)
+				display[current_index] = '\n';
+
+		}
+	}
+
+	puts(display);
+	puts(last_row);
+}
+/*
+	Function: dice_roll_taham()
+	Date Created: 10/21/2019
+	Description: Generates several random values to be passed into dice_animation() to create a faux animation. Steps the speed down, then passes the player's actual roll into dice_animation()
+		NOTE: Original author of this function is Taham Khaleeq. This finished product is a result of a collaboration between the two of us in which his randomized 'animation' and my graphics were joined into one. The original function by Taham was made for use in Blackjack and as such only accepted one die value. I created the graphics and adjusted his function to work with 5 dice at once.
+	Preconditions: Player roll values generated
+	Postconditions: dice_animation() called several times
+*/
+void dice_roll_taham(int player_roll[])
+{
+	int dice[] = { 1, 3, 6, 2, 4 };
+
+	for (int i = 0; i < 7; i++) {
+
+		system("cls");
+		//Generate random values for dice
+		for (int j = 0; j < 5; j++) {
+			dice[j] = rand() % 6 + 1;
+		}
+		//Call display function
+		dice_animation(dice);
+		Sleep(100);
+	}
+
+	for (int i = 0; i < 4; i++) {
+
+		system("cls");
+		for (int j = 0; j < 5; j++) {
+			dice[j] = rand() % 6 + 1;
+		}
+		dice_animation(dice);
+		Sleep(300);
+	}
+
+	system("cls");
+	dice_animation(player_roll);
+}

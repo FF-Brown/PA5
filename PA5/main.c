@@ -1,4 +1,4 @@
-/*
+﻿/*
 	Author: Nathan Brown
 	Created: 10/08/2019 (National Hydrogen and Fuel Cell Day! Because the atomic weight of hydrogen is 1.008)
 	Description: Text-based version of Yahtzee!
@@ -43,6 +43,7 @@ game_start:
 		while (roll_count < 4 && option != 'n') {
 			system("pause");
 			roll_dice(dice, hold);
+			dice_roll_taham(dice);
 			display_dice(dice);
 			option = roll_continue(roll_count);
 			if (option == 'y')
@@ -84,6 +85,7 @@ game_start:
 		while (roll_count < 4 && option != 'n') {
 			system("pause");
 			roll_dice(dice, hold);
+			dice_roll_taham(dice);
 			display_dice(dice);
 			option = roll_continue(roll_count);
 			if (option == 'y')
