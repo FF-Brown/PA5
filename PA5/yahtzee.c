@@ -164,7 +164,7 @@ char roll_continue(int roll_count)
 	printf("That was roll #%d. ", roll_count);
 	if (roll_count < 3) {
 		while (option != 'y' && option != 'n') {
-			printf("Keep rolling?\n");
+			printf("Keep rolling? (y/n)\n");
 			scanf(" %c", &option);
 			if (option != 'y' && option != 'n')
 				printf("Invalid input.\n");
@@ -471,7 +471,7 @@ char cont_playing(void)
 {
 	char cont = '\0';
 	while (cont != 'y' && cont != 'n') {
-		printf("Would you like to play again?\n");
+		printf("Would you like to play again? (y/n)\n");
 		scanf(" %c", &cont);
 		if (cont != 'y' && cont != 'n')
 			printf("Invalid input.\n");
